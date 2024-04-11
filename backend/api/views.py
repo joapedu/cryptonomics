@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from . import HttpResponse
 
 def index(request):
     return HttpResponse("api funcionando.")
