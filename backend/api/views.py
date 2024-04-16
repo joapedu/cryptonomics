@@ -13,7 +13,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-def index():
+def index(request): # pylint: disable=unused-argument
     """Resposta da tela de api"""
     return HttpResponse("🚧🚧🚧🚧🚧🚧🚧  Em Construção  🚧🚧🚧🚧🚧🚧🚧")
 
