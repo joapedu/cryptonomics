@@ -1,48 +1,56 @@
-from django.http import HttpResponse # type: ignore
-from django.utils.http import urlsafe_base64_encode # type: ignore
-from django.utils.encoding import force_bytes # type: ignore
+"""Arquivo de views da api"""
+from django.http import HttpResponse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
 
-from rest_framework import status # type: ignore
-from rest_framework.response import Response # type: ignore
-from rest_framework.views import APIView # type: ignore
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from django.contrib.auth import authenticate, login, logout # type: ignore
-from django.contrib.auth.models import User # type: ignore
-from django.contrib.auth.tokens import default_token_generator # type: ignore
-
-from django.core.mail import send_mail # type: ignore
-
-def index(request):
+def index(request): # pylint: disable=unused-argument
+    """Resposta da tela de api"""
     return HttpResponse("🚧🚧🚧🚧🚧🚧🚧  Em Construção  🚧🚧🚧🚧🚧🚧🚧")
 
 class LoginView(APIView):
+    """Classe da api de login"""
     def post(self, request):
+        """Método post de login"""
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
             return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 class LogoutView(APIView):
+    """Classe da api de logout"""
     def post(self, request):
+        """Método post de logout"""
         logout(request)
         return Response(status=status.HTTP_200_OK)
 
 class RegisterView(APIView):
+    """Classe da api de registro"""
     def post(self, request):
+        """Método post de registro"""
         username = request.data.get('username')
         password = request.data.get('password')
         if not User.objects.filter(username=username).exists():
-            user = User.objects.create_user(username=username, password=password)
+            User.objects.create_user(username=username, password=password)
             return Response(status=status.HTTP_201_CREATED)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ResetPasswordView(APIView):
+    """Classe da api de mudança de senha"""
     def post(self, request):
+        """Método post de resetar senha"""
         email = request.data.get('email')
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
@@ -57,5 +65,4 @@ class ResetPasswordView(APIView):
                 fail_silently=False,
             )
             return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
