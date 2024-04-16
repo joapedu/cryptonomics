@@ -1,21 +1,24 @@
-from django.http import HttpResponse # type: ignore
-from django.utils.http import urlsafe_base64_encode # type: ignore
-from django.utils.encoding import force_bytes # type: ignore
+"""Arquivo de views da api"""
+from django.http import HttpResponse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
-from rest_framework import status # type: ignore
-from rest_framework.response import Response # type: ignore
-from rest_framework.views import APIView # type: ignore
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from django.contrib.auth import authenticate, login, logout # type: ignore
-from django.contrib.auth.models import User # type: ignore
-from django.contrib.auth.tokens import default_token_generator # type: ignore
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 
-from django.core.mail import send_mail # type: ignore
+from django.core.mail import send_mail
 
 def index(request):
+    """Resposta da tela de api"""
     return HttpResponse("🚧🚧🚧🚧🚧🚧🚧  Em Construção  🚧🚧🚧🚧🚧🚧🚧")
 
 class LoginView(APIView):
+    """Classe da api de login"""
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -27,11 +30,13 @@ class LoginView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 class LogoutView(APIView):
+    """Classe da api de logout"""
     def post(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
 
 class RegisterView(APIView):
+    """Classe da api de registro"""
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -42,6 +47,7 @@ class RegisterView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ResetPasswordView(APIView):
+    """Classe da api de mudança de senha"""
     def post(self, request):
         email = request.data.get('email')
         if User.objects.filter(email=email).exists():
