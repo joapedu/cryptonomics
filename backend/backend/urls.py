@@ -1,3 +1,4 @@
+"""Arquivo de urls do projeto"""
 from django.contrib import admin # type: ignore
 
 from django.urls import include, path # type: ignore
@@ -8,4 +9,3 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("admin/", admin.site.urls),
 ]
-
