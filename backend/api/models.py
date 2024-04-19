@@ -9,3 +9,5 @@ class FavCoins(models.Model):
 
     # Nome da moeda
     nome = models.CharField(max_length=30, blank=False, default='')
+
+    objects = models.Manager()

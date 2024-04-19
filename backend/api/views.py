@@ -72,11 +72,17 @@ class ResetPasswordView(APIView):
 
 class FavCoinsView(APIView):
     """ Listar ou cadastrar moedas favoritas """
-    def get(self):
+    def get(self, request): # pylint: disable=unused-argument
         """ Lista as moedas favoritas """
         coins = FavCoins.objects.all()
-        serializer = FavCoinsSerializer(coins, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        dados = []
+        for coin in coins:
+            serializer = FavCoinsSerializer(coin)
+            dados.append({
+                'id': coin.id,
+                'dados': serializer.data
+            })
+        return Response(dados, status=status.HTTP_200_OK)
 
     def post(self, request):
         """ Cadastra as moedas favoritas """
@@ -87,13 +93,23 @@ class FavCoinsView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class FavCoinsDetailView(APIView):
-    """ Atualizar ou deletar uma moeda favorita """
+    """ Listar, atualizar ou deletar uma moeda favorita """
     def get_object(self, pk):
         """ Trazer o PK primary key """
         try:
             return FavCoins.objects.get(pk=pk)
         except Exception as exc:
             raise exc
+
+    def get(self, request, pk): # pylint: disable=unused-argument
+        """ Listar moeda favorita """
+        coin = self.get_object(pk)
+        serializer = FavCoinsSerializer(coin)
+        dado = {
+            'id': coin.id,
+            'dados': serializer.data
+        }
+        return Response(dado, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         """ Atualizar moeda favorita """
@@ -104,7 +120,7 @@ class FavCoinsDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, pk):
+    def delete(self, request, pk): # pylint: disable=unused-argument
         """ Deletar moeda favorita """
         coin = self.get_object(pk)
         coin.delete()

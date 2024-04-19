@@ -6,7 +6,7 @@ from . import views
 
 fav_coins = ([
     path('all/', views.FavCoinsView.as_view(), name='todas'),
-    path('detail/<int:pk>', views.FavCoinsDetailView.as_view(), name='detahe'),
+    path('detail/<int:pk>/', views.FavCoinsDetailView.as_view(), name='detalhe'),
 ])
 
 urlpatterns = [
