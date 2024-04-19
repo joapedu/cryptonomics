@@ -13,6 +13,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.models import FavCoins
+from api.serializers import FavCoinsSerializer
+
 def index(request): # pylint: disable=unused-argument
     """Resposta da tela de api"""
     return HttpResponse("🚧🚧🚧🚧🚧🚧🚧  Em Construção  🚧🚧🚧🚧🚧🚧🚧")
@@ -66,3 +69,43 @@ class ResetPasswordView(APIView):
             )
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class FavCoinsView(APIView):
+    """ Listar ou cadastrar moedas favoritas """
+    def get(self):
+        """ Lista as moedas favoritas """
+        coins = FavCoins.objects.all()
+        serializer = FavCoinsSerializer(coins, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        """ Cadastra as moedas favoritas """
+        serializer = FavCoinsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class FavCoinsDetailView(APIView):
+    """ Atualizar ou deletar uma moeda favorita """
+    def get_object(self, pk):
+        """ Trazer o PK primary key """
+        try:
+            return FavCoins.objects.get(pk=pk)
+        except Exception as exc:
+            raise exc
+
+    def put(self, request, pk):
+        """ Atualizar moeda favorita """
+        coin = self.get_object(pk)
+        serializer = FavCoinsSerializer(coin, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, pk):
+        """ Deletar moeda favorita """
+        coin = self.get_object(pk)
+        coin.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
