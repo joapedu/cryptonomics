@@ -1,5 +1,10 @@
-# Cryptonomics
+<div align='center'>
 
+  ![foto](https://github.com/joapedu/cryptonomics/blob/develop/frontend/public/logo-circular.png)
+
+</div>
+
+# Cryptonomics
 ### 👁‍🗨 Vision: 
 - To become the leading global reference platform for accurate and reliable information about cryptocurrencies, empowering individuals and organizations to make informed decisions and actively participate in the world of digital currencies.
 
