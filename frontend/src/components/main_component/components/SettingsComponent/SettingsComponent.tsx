@@ -1,11 +1,10 @@
 import { ReactElement } from "react";
 
-
-const YourCoinsComponent = (): ReactElement => {
+const SettingsComponent = (): ReactElement => {
     return (<>
         Settings
     </>
     )
 }
 
-export { YourCoinsComponent }
+export { SettingsComponent }
